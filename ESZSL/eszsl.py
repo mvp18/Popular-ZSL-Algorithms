@@ -36,10 +36,11 @@ class ESZSL():
 		test_loc = 'test_unseen_loc'
 
 		feat = res101['features']
-		self.X_train = feat[:,np.squeeze(att_splits[train_loc]-1)]
-		self.X_val = feat[:,np.squeeze(att_splits[val_loc]-1)]
+		# Shape -> (dxN)
+		self.X_train = feat[:, np.squeeze(att_splits[train_loc]-1)]
+		self.X_val = feat[:, np.squeeze(att_splits[val_loc]-1)]
 		self.X_trainval = np.concatenate((self.X_train, self.X_val), axis=1)
-		self.X_test = feat[:,np.squeeze(att_splits[test_loc]-1)]
+		self.X_test = feat[:, np.squeeze(att_splits[test_loc]-1)]
 
 		labels = res101['labels']
 		labels_train = labels[np.squeeze(att_splits[train_loc]-1)]
@@ -79,6 +80,7 @@ class ESZSL():
 		self.gt_trainval[np.arange(labels_trainval.shape[0]), np.squeeze(labels_trainval)] = 1
 
 		sig = att_splits['att']
+		# Shape -> (Number of attributes, Number of Classes)
 		self.train_sig = sig[:, train_labels_seen-1]
 		self.val_sig = sig[:, val_labels_unseen-1]
 		self.trainval_sig = sig[:, trainval_labels_seen-1]
@@ -86,11 +88,11 @@ class ESZSL():
 
 	def find_W(self, X, y, sig, alpha, gamma):
 
-		part_0 = np.linalg.pinv(np.matmul(X, X.transpose()) + (10**alpha)*np.eye(X.shape[0]))
-		part_1 = np.matmul(np.matmul(X, y), sig.transpose())
-		part_2 = np.linalg.pinv(np.matmul(sig, sig.transpose()) + (10**gamma)*np.eye(sig.shape[0]))
+		part_0 = np.linalg.pinv(np.matmul(X, X.T) + (10**alpha)*np.eye(X.shape[0]))
+		part_1 = np.matmul(np.matmul(X, y), sig.T)
+		part_2 = np.linalg.pinv(np.matmul(sig, sig.T) + (10**gamma)*np.eye(sig.shape[0]))
 
-		W = np.matmul(np.matmul(part_0, part_1), part_2)
+		W = np.matmul(np.matmul(part_0, part_1), part_2) # Feature Dimension x Number of Attributes
 
 		return W
 
@@ -116,7 +118,7 @@ class ESZSL():
 
 	def zsl_acc(self, X, W, y_true, sig): # Class Averaged Top-1 Accuarcy
 
-		class_scores = np.matmul(np.matmul(X.transpose(), W), sig)
+		class_scores = np.matmul(np.matmul(X.T, W), sig) # N x Number of Classes
 		predicted_classes = np.array([np.argmax(output) for output in class_scores])
 		cm = confusion_matrix(y_true, predicted_classes)
 		cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
@@ -136,5 +138,6 @@ class ESZSL():
 		print('Test Acc:{}'.format(test_acc))
 
 args = parser.parse_args()
+print('Dataset : {}\n'.format(args.dataset))
 model = ESZSL(args)
 model.evaluate()
