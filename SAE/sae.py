@@ -21,7 +21,7 @@ Best Value of Lambda found by validation & corr. test accuracies:
 
 		   [F-->S]		[S-->F]		
 AWA2 -> 0.5166 @ 0.6  0.6051 @ 0.2
-CUB  -> 0.3948 @ 100  0.4671 @ 0.2
+CUB  -> 0.3948 @ 100  0.4670 @ 0.2
 SUN  -> 0.5285 @ 0.32 0.5986 @ 0.16
 APY  -> 0.1607 @ 2.0  0.1650 @ 4.0
 
