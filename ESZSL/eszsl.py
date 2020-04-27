@@ -14,10 +14,10 @@ parser.add_argument('-gamma', '--gamma', default=0, type=int)
 
 Best Values of (Alpha, Gamma) found by validation & corr. test accuracies:
 
-AWA2 -> (3, 0)   -> Test Acc : 0.5482
-CUB  ->  (3, -1) -> Test Acc : 0.5394
-SUN  -> (3, 2)   -> Test Acc : 0.5569
-APY  -> (3, -1)  -> Test Acc : 0.3856
+AWA2 -> (3, 0)  -> Test Acc : 0.5482
+CUB  -> (3, -1) -> Test Acc : 0.5394
+SUN  -> (3, 2)  -> Test Acc : 0.5569
+APY  -> (3, -1) -> Test Acc : 0.3856
 
 """
 
