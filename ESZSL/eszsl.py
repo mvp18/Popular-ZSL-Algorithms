@@ -12,6 +12,9 @@ parser.add_argument('-gamma', '--gamma', default=0, type=int)
 
 """
 
+Alpha --> Regularizer for Kernel/Feature Space
+Gamma --> Regularizer for Attribute Space
+
 Best Values of (Alpha, Gamma) found by validation & corr. test accuracies:
 
 AWA2 -> (3, 0)  -> Test Acc : 0.5482
@@ -23,9 +26,7 @@ APY  -> (3, -1) -> Test Acc : 0.3856
 
 class ESZSL():
 	
-	def __init__(self, args):
-
-		self.args = args
+	def __init__(self):
 
 		data_folder = '../datasets/'+args.dataset+'/'
 		res101 = io.loadmat(data_folder+'res101.mat')
@@ -96,7 +97,7 @@ class ESZSL():
 
 		return W
 
-	def find_hyperparamters(self):
+	def fit(self):
 
 		print('Training...\n')
 
@@ -126,10 +127,23 @@ class ESZSL():
 
 		return acc
 
-	def evaluate(self):
+	# def zsl_acc(self, X, W, y_true, classes, sig): # Class Averaged Top-1 Accuarcy
 
-		if self.args.mode=='train': alpha, gamma = self.find_hyperparamters()
-		else: alpha, gamma = self.args.alpha, self.args.gamma
+	# 	class_scores = np.matmul(np.matmul(X.T, W), sig) # N x Number of Classes
+	# 	y_pred = np.array([np.argmax(output) for output in class_scores])
+	# 	y_true = np.squeeze(y_true)
+
+	# 	per_class_acc = np.zeros(len(classes))
+
+	# 	for i in range(len(classes)):
+	# 		is_class = y_true==classes[i]
+	# 		per_class_acc[i] = ((y_pred[is_class]==y_true[is_class]).sum())/is_class.sum()
+		
+	# 	return per_class_acc.mean()
+
+	def evaluate(self, alpha, gamma):
+
+		print('Testing...\n')
 
 		best_W = self.find_W(self.X_trainval, self.gt_trainval, self.trainval_sig, alpha, gamma) # combine train and val
 
@@ -137,7 +151,14 @@ class ESZSL():
 
 		print('Test Acc:{}'.format(test_acc))
 
-args = parser.parse_args()
-print('Dataset : {}\n'.format(args.dataset))
-model = ESZSL(args)
-model.evaluate()
+if __name__ == '__main__':
+	
+	args = parser.parse_args()
+	print('Dataset : {}\n'.format(args.dataset))
+	
+	clf = ESZSL()
+	
+	if args.mode=='train': 
+		args.alpha, args.gamma = clf.fit()
+	
+	clf.evaluate(args.alpha, args.gamma)

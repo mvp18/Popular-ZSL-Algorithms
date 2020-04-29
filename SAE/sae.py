@@ -9,6 +9,7 @@ parser.add_argument('-data', '--dataset', help='choose between APY, AWA2, CUB, S
 parser.add_argument('-mode', '--mode', help='train/test, if test set alpha, gamma to best values below', default='train', type=str)
 parser.add_argument('-ld1', '--ld1', default=5, help='best value for F-->S during test, lower bound of variation interval during train', type=float)
 parser.add_argument('-ld2', '--ld2', default=5, help='best value for S-->F during test, upper bound of variation interval during train', type=float)
+
 """
 Range of Lambda for Validation:
 
@@ -195,7 +196,9 @@ class SAE():
 
 		print('Test Acc --> [F-->S]:{} [S-->F]:{}'.format(test_acc_F2S, test_acc_S2F))
 
-args = parser.parse_args()
-print('Dataset : {}\n'.format(args.dataset))
-model = SAE(args)
-model.evaluate()
+if __name__ == '__main__':
+
+	args = parser.parse_args()
+	print('Dataset : {}\n'.format(args.dataset))
+	clf = SAE(args)
+	clf.evaluate()

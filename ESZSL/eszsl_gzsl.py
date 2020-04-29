@@ -1,69 +1,109 @@
 import numpy as np
 import argparse
 from scipy import io
+from sklearn.metrics import confusion_matrix
 
-parser = argparse.ArgumentParser(description="ESZSL")
+parser = argparse.ArgumentParser(description="GZSL with ESZSL")
 
 parser.add_argument('-data', '--dataset', help='choose between APY, AWA2, CUB, SUN', default='AWA2', type=str)
+parser.add_argument('-mode', '--mode', help='train/test, if test, set alpha, gamma to best values as given below', default='train', type=str)
 parser.add_argument('-alpha', '--alpha', default=0, type=int)
 parser.add_argument('-gamma', '--gamma', default=0, type=int)
 
 """
 
+Alpha --> Regularizer for Kernel/Feature Space
+Gamma --> Regularizer for Attribute Space
+
 Best Values of (Alpha, Gamma) found by validation & corr. test accuracies:
 
-AWA2 -> (3, 0)  -> Seen : 0.8884 Unseen : 0.0404 HM : 0.0772
-CUB  -> (3, -1) -> Seen : 0.6380 Unseen : 0.1263 HM : 0.2108
-SUN  -> (3, 2)  -> Seen : 0.2841 Unseen : 0.1375 HM : 0.1853
-APY  -> (3, -1) -> Seen : 0.8017 Unseen : 0.0241 HM : 0.0468
+AWA2 -> (3, 0) -> Seen : 0.8884 Unseen : 0.0404 HM : 0.0772
+CUB  -> (3, 0) -> Seen : 0.5653 Unseen : 0.1470 HM : 0.2334
+SUN  -> (3, 2) -> Seen : 0.2841 Unseen : 0.1375 HM : 0.1853
+APY  -> (2, 0) -> Seen : 0.8107 Unseen : 0.0225 HM : 0.0439
 
 """
 
 class ESZSL():
 	
-	def __init__(self, args):
-
-		self.args = args
+	def __init__(self):
 
 		data_folder = '../datasets/'+args.dataset+'/'
 		res101 = io.loadmat(data_folder+'res101.mat')
 		att_splits=io.loadmat(data_folder+'att_splits.mat')
 
+		train_loc = 'train_loc'
+		val_loc = 'val_loc'
 		trainval_loc = 'trainval_loc'
 		test_seen_loc = 'test_seen_loc'
 		test_unseen_loc = 'test_unseen_loc'
 
 		feat = res101['features']
 		# Shape -> (dxN)
-		self.X_trainval = feat[:, np.squeeze(att_splits[trainval_loc]-1)]
+		self.X_trainval_gzsl = feat[:, np.squeeze(att_splits[trainval_loc]-1)]
 		self.X_test_seen = feat[:, np.squeeze(att_splits[test_seen_loc]-1)]
 		self.X_test_unseen = feat[:, np.squeeze(att_splits[test_unseen_loc]-1)]
 
 		labels = res101['labels']
-		self.labels_trainval = labels[np.squeeze(att_splits[trainval_loc]-1)]
-		self.labels_test_seen = labels[np.squeeze(att_splits[test_seen_loc]-1)]
-		self.labels_test_unseen = labels[np.squeeze(att_splits[test_unseen_loc]-1)]
+		self.labels_trainval_gzsl = np.squeeze(labels[np.squeeze(att_splits[trainval_loc]-1)])
+		self.labels_test_seen = np.squeeze(labels[np.squeeze(att_splits[test_seen_loc]-1)])
+		self.labels_test_unseen = np.squeeze(labels[np.squeeze(att_splits[test_unseen_loc]-1)])
 		self.labels_test = np.concatenate((self.labels_test_seen, self.labels_test_unseen), axis=0)
 
-		trainval_classes_seen = np.unique(self.labels_trainval)
+		train_classes = np.unique(np.squeeze(labels[np.squeeze(att_splits[train_loc]-1)]))
+		val_classes = np.unique(np.squeeze(labels[np.squeeze(att_splits[val_loc]-1)]))
+		trainval_classes_seen = np.unique(self.labels_trainval_gzsl)
 		self.test_classes_seen = np.unique(self.labels_test_seen)
 		self.test_classes_unseen = np.unique(self.labels_test_unseen)
-		test_classes = np.unique(self.labels_test)
+		test_classes = np.unique(self.labels_test) # All Classes of the dataset
+
+		train_gzsl_indices=[]
+		val_gzsl_indices=[]
+
+		for cl in train_classes:
+			train_gzsl_indices = train_gzsl_indices + np.squeeze(np.where(self.labels_trainval_gzsl==cl)).tolist()
+
+		for cl in val_classes:
+			val_gzsl_indices = val_gzsl_indices + np.squeeze(np.where(self.labels_trainval_gzsl==cl)).tolist()
+
+		train_gzsl_indices = sorted(train_gzsl_indices)
+		val_gzsl_indices = sorted(val_gzsl_indices)
+		
+		self.X_train_gzsl = self.X_trainval_gzsl[:, np.array(train_gzsl_indices)]
+		self.labels_train_gzsl = self.labels_trainval_gzsl[np.array(train_gzsl_indices)]
+		
+		self.X_val_gzsl = self.X_trainval_gzsl[:, np.array(val_gzsl_indices)]
+		self.labels_val_gzsl = self.labels_trainval_gzsl[np.array(val_gzsl_indices)]
 
 		i=0
 		for labels in trainval_classes_seen:
-			self.labels_trainval[self.labels_trainval == labels] = i    
+			self.labels_trainval_gzsl[self.labels_trainval_gzsl == labels] = i    
 			i+=1
 
-		self.gt_trainval = np.zeros((self.labels_trainval.shape[0], len(trainval_classes_seen)))
-		self.gt_trainval[np.arange(self.labels_trainval.shape[0]), np.squeeze(self.labels_trainval)] = 1
+		j=0
+		for labels in train_classes:
+			self.labels_train_gzsl[self.labels_train_gzsl == labels] = j
+			j+=1
+
+		k=0
+		for labels in val_classes:
+			self.labels_val_gzsl[self.labels_val_gzsl == labels] = k
+			k+=1
+
+		self.gt_train_gzsl = np.zeros((self.labels_train_gzsl.shape[0], len(train_classes)))
+		self.gt_train_gzsl[np.arange(self.labels_train_gzsl.shape[0]), self.labels_train_gzsl] = 1
+
+		self.gt_trainval = np.zeros((self.labels_trainval_gzsl.shape[0], len(trainval_classes_seen)))
+		self.gt_trainval[np.arange(self.labels_trainval_gzsl.shape[0]), self.labels_trainval_gzsl] = 1
 
 		sig = att_splits['att']
 		# Shape -> (Number of attributes, Number of Classes)
 		self.trainval_sig = sig[:, trainval_classes_seen-1]
+		self.train_sig = sig[:, train_classes-1]
+		self.val_sig = sig[:, val_classes-1]
 		self.test_sig_seen = sig[:, self.test_classes_seen-1]
 		self.test_sig_unseen = sig[:, self.test_classes_unseen-1]
-		self.test_sig = sig[:, test_classes-1]
+		self.test_sig = sig[:, test_classes-1] # Entire Signature Matrix
 
 	def find_W(self, X, y, sig, alpha, gamma):
 
@@ -75,11 +115,40 @@ class ESZSL():
 
 		return W
 
-	def zsl_acc(self, X, W, y_true, classes): # Class Averaged Top-1 Accuarcy
+	def fit(self):
 
-		class_scores = np.matmul(np.matmul(X.T, W), self.test_sig) # N x Number of Classes
+		print('Training...\n')
+
+		best_acc = 0.0
+
+		for alph in range(-3, 4):
+			for gamm in range(-3, 4):
+				W = self.find_W(self.X_train_gzsl, self.gt_train_gzsl, self.train_sig, alph, gamm)
+				acc = self.zsl_acc(self.X_val_gzsl, W, self.labels_val_gzsl, self.val_sig)
+				print('Val Acc:{}; Alpha:{}; Gamma:{}\n'.format(acc, alph, gamm))
+				if acc>best_acc:
+					best_acc = acc
+					alpha = alph
+					gamma = gamm
+
+		print('\nBest Val Acc:{} with Alpha:{} & Gamma:{}\n'.format(best_acc, alpha, gamma))
+		
+		return alpha, gamma
+
+	def zsl_acc(self, X, W, y_true, sig): # Class Averaged Top-1 Accuarcy
+
+		class_scores = np.matmul(np.matmul(X.T, W), sig) # N x Number of Classes
+		predicted_classes = np.array([np.argmax(output) for output in class_scores])
+		cm = confusion_matrix(y_true, predicted_classes)
+		cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+		acc = sum(cm.diagonal())/sig.shape[1]
+
+		return acc
+
+	def zsl_acc_gzsl(self, X, W, y_true, classes, sig): # Class Averaged Top-1 Accuarcy
+
+		class_scores = np.matmul(np.matmul(X.T, W), sig) # N x Number of Classes
 		y_pred = np.array([np.argmax(output)+1 for output in class_scores])
-		y_true = np.squeeze(y_true)
 
 		per_class_acc = np.zeros(len(classes))
 
@@ -89,19 +158,26 @@ class ESZSL():
 		
 		return per_class_acc.mean()
 
-	def evaluate(self):
+	def evaluate(self, alpha, gamma):
 
-		alpha, gamma = self.args.alpha, self.args.gamma
+		print('Testing...\n')
 
-		best_W = self.find_W(self.X_trainval, self.gt_trainval, self.trainval_sig, alpha, gamma) # combine train and val
+		best_W = self.find_W(self.X_trainval_gzsl, self.gt_trainval, self.trainval_sig, alpha, gamma) # combine train and val
 
-		acc_seen_classes = self.zsl_acc(self.X_test_seen, best_W, self.labels_test_seen, self.test_classes_seen)
-		acc_unseen_classes = self.zsl_acc(self.X_test_unseen, best_W, self.labels_test_unseen, self.test_classes_unseen)
+		acc_seen_classes = self.zsl_acc_gzsl(self.X_test_seen, best_W, self.labels_test_seen, self.test_classes_seen, self.test_sig)
+		acc_unseen_classes = self.zsl_acc_gzsl(self.X_test_unseen, best_W, self.labels_test_unseen, self.test_classes_unseen, self.test_sig)
 		HM = 2*acc_seen_classes*acc_unseen_classes/(acc_seen_classes+acc_unseen_classes)
 
 		print('U:{}; S:{}; H:{}'.format(acc_unseen_classes, acc_seen_classes, HM))
 
-args = parser.parse_args()
-print('Dataset : {}\n'.format(args.dataset))
-model = ESZSL(args)
-model.evaluate()
+if __name__ == '__main__':
+	
+	args = parser.parse_args()
+	print('Dataset : {}\n'.format(args.dataset))
+	
+	clf = ESZSL()
+	
+	if args.mode=='train': 
+		args.alpha, args.gamma = clf.fit()
+	
+	clf.evaluate(args.alpha, args.gamma)
