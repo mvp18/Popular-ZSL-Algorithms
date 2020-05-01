@@ -5,7 +5,7 @@ from sklearn.metrics import confusion_matrix
 
 parser = argparse.ArgumentParser(description="ESZSL")
 
-parser.add_argument('-data', '--dataset', help='choose between APY, AWA2, CUB, SUN', default='AWA2', type=str)
+parser.add_argument('-data', '--dataset', help='choose between APY, AWA2, AWA1, CUB, SUN', default='AWA2', type=str)
 parser.add_argument('-mode', '--mode', help='train/test, if test set alpha, gamma to best values below', default='train', type=str)
 parser.add_argument('-alpha', '--alpha', default=0, type=int)
 parser.add_argument('-gamma', '--gamma', default=0, type=int)
@@ -17,6 +17,7 @@ Gamma --> Regularizer for Attribute Space
 
 Best Values of (Alpha, Gamma) found by validation & corr. test accuracies:
 
+AWA1 -> (3, 0)  -> Test Acc : 0.5680
 AWA2 -> (3, 0)  -> Test Acc : 0.5482
 CUB  -> (3, -1) -> Test Acc : 0.5394
 SUN  -> (3, 2)  -> Test Acc : 0.5569

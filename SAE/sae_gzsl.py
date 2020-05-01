@@ -5,7 +5,7 @@ from sklearn.metrics import confusion_matrix
 
 parser = argparse.ArgumentParser(description="GZSL for SAE")
 
-parser.add_argument('-data', '--dataset', help='choose between APY, AWA2, CUB, SUN', default='AWA2', type=str)
+parser.add_argument('-data', '--dataset', help='choose between APY, AWA2, AWA1, CUB, SUN', default='AWA2', type=str)
 parser.add_argument('-mode', '--mode', help='train/test, if test set alpha, gamma to best values below', default='train', type=str)
 parser.add_argument('-ld1', '--ld1', default=5, help='best value for F-->S during test, lower bound of variation interval during train', type=float)
 parser.add_argument('-ld2', '--ld2', default=5, help='best value for S-->F during test, upper bound of variation interval during train', type=float)
@@ -173,11 +173,11 @@ class SAE():
 		if mode=='F2S':
 			# [F --> S], projecting data from feature space to semantic space
 			F2S = np.dot(X.T, self.normalizeFeature(W).T)# N x k
-			dist = 1-spatial.distance.cdist(F2S, self.normalizeFeature(sig.T), 'cosine')# N x C(no. of classes)
+			dist = 1-spatial.distance.cdist(F2S, sig.T, 'cosine')# N x C(no. of classes)
 
 		if mode=='S2F':
 			# [S --> F], projecting from semantic to visual space
-			S2F = np.dot(self.normalizeFeature(sig.T), self.normalizeFeature(W))# N x k
+			S2F = np.dot(sig.T, self.normalizeFeature(W))# N x k
 			dist = 1-spatial.distance.cdist(X.T, self.normalizeFeature(S2F), 'cosine')# N x C(no. of classes)
 
 		y_pred = np.array([np.argmax(output)+1 for output in dist])
@@ -194,9 +194,9 @@ class SAE():
 
 		# [F --> S], projecting data from feature space to semantic space
 		F2S = np.dot(X.T, self.normalizeFeature(W).T)# N x k
-		dist_F2S = 1-spatial.distance.cdist(F2S, self.normalizeFeature(sig.T), 'cosine')# N x C(no. of classes)
+		dist_F2S = 1-spatial.distance.cdist(F2S, sig.T, 'cosine')# N x C(no. of classes)
 		# [S --> F], projecting from semantic to visual space
-		S2F = np.dot(self.normalizeFeature(sig.T), self.normalizeFeature(W))
+		S2F = np.dot(sig.T, self.normalizeFeature(W))
 		dist_S2F = 1-spatial.distance.cdist(X.T, self.normalizeFeature(S2F), 'cosine')
 		
 		pred_F2S = np.array([np.argmax(y) for y in dist_F2S])
