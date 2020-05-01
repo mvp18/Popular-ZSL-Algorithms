@@ -1,12 +1,11 @@
 ## Running the code
 
-# Train
+#### Train
 
 ```
 python eszsl/eszsl_gzsl.py -data AWA2/AWA1/CUB/SUN/APY -mode train
-
 ```
-For testing, change mode to test and set alpha, gamma to best combination from table below.
+For testing, set mode to test and set alpha, gamma to best combination from tables below.
 
 ## Results
 
