@@ -22,7 +22,7 @@ For testing, set mode to test and set alpha, gamma to best combination from tabl
 #### Generalized ZSL
 
 |Dataset |ZSLGBU Results       |||Respository Results |||Hyperparams from Val |
-|--------|:-----:|:-----:|:-----:|:-----:|-----:|:-----:|:-------------------:|
+|--------|:-----:|:-----:|:-----:|:-----:|:----:|:-----:|:-------------------:|
 |        | U     | S     | H     | U     | S    | H     |            	      |
 | CUB    | 12.6 | **63.8** | 21.0 | **14.70** | 56.53 | **23.34** |Alpha=3, Gamma=0 |
 | AWA1   | **6.6** | 75.6 | **12.1** | 5.29 | **86.84** | 9.98 |Alpha=3, Gamma=0 |

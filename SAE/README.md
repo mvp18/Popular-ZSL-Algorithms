@@ -11,27 +11,25 @@ For testing, set mode to test and set alpha, gamma to best combination from tabl
 
 #### Classical ZSL
 
-| Dataset | ZSLGBU Results| Respository Results |Hyperparams from Val |
-|---------|:-------------:|:-------------------:|:-------------------:|
-| CUB     |     53.9      | 	     53.94 		|Alpha=3, Gamma=-1    |
-| AWA1    |   **58.2**    |        56.80        |Alpha=3, Gamma=0     |
-| AWA2    |   **58.6**    |        54.82        |Alpha=3, Gamma=0     |
-| aPY     |     38.3      |      **38.56**      |Alpha=3, Gamma=-1    |
-| SUN     |     54.5      |      **55.69**      |Alpha=3, Gamma=2     |
+| Dataset | ZSLGBU Results | Respository Results                   ||||
+|---------|:--------------:|:----------------------------------------:|
+|         |                | F->S (W) | Lambda | S->F (W^T) | Lambda  |
+| CUB     | 33.3           | 39.48    | 100    | **46.70**  | 0.2     |
+| AWA1    | 53.0           | 51.34    | 3.0    | **59.89**  | 0.8     |
+| AWA2    | 54.1           | 51.66    | 0.6    | **60.51**  | 0.2     |
+| aPY     | 8.3            | 16.07    | 2.0    | **16.50**  | 4.0     |
+| SUN     | 40.3           | 52.85    | 0.32   | **59.86**  | 0.16    |
 
 #### Generalized ZSL
 
-|Dataset |ZSLGBU Results       |||Respository Results |||Hyperparams from Val |
-|--------|:-----:|:-----:|:-----:|:-----:|-----:|:-----:|:-------------------:|
-|        | U     | S     | H     | U     | S    | H     |            	      |
-| CUB    | 12.6 | **63.8** | 21.0 | **14.70** | 56.53 | **23.34** |Alpha=3, Gamma=0 |
-| AWA1   | **6.6** | 75.6 | **12.1** | 5.29 | **86.84** | 9.98 |Alpha=3, Gamma=0 |
-| AWA2   | **5.9** | 77.8 | **11.0** | 4.04 | **88.84** | 7.72 |Alpha=3, Gamma=0 |
-| aPY    | **2.4** | 70.1 | **4.6** | 2.25 | **81.07** | 4.39 |Alpha=2, Gamma=0 |
-| SUN    | 11.0 | 27.9 | 15.8 | **13.75** | **28.41** | **18.53** |Alpha=3, Gamma=2 |
+|Dataset |ZSLGBU Results       |||Respository Results     ||||||||
+|--------|:-----:|:-----:|:-----:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|        |       |       |       | F->S (W) ||| Lambda | S->F (W^T) ||| Lambda  |
+|        | U     | S     | H     | U | S | H  |        | U | S | H    |         |
+| CUB    | 12.6 | **63.8** | 21.0 | **14.70** | 56.53 | **23.34** | 1 | **14.70** | 56.53 | **23.34** | 1 |
 
 ### References
 
-[1] [Original MATLAB Code by Authors](https://github.com/bernard24/Embarrassingly-simple-ZSL)
+[1] [Original MATLAB Code by Authors](https://github.com/Elyorcv/SAE)
 
-[2] https://github.com/sbharadwajj/embarrassingly-simple-zero-shot-learning
+[2] https://github.com/hoseong-kim/sae-pytorch
