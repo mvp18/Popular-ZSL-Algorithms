@@ -11,9 +11,9 @@ For testing, set mode to test and set alpha, gamma to best combination from tabl
 
 #### Classical ZSL
 
-| Dataset | ZSLGBU Results | Respository Results                   ||||
-|---------|:--------------:|:----------------------------------------:|
-|         |                | F->S (W) | Lambda | S->F (W^T) | Lambda  |
+| Dataset | ZSLGBU Results ||| Repository Results                    ||
+|---------|:--------------:|:--------:|:------:|:----------:|:-------:|
+|         |                | F->S (W) | Lambda | S->F (W.T) | Lambda  |
 | CUB     | 33.3           | 39.48    | 100    | **46.70**  | 0.2     |
 | AWA1    | 53.0           | 51.34    | 3.0    | **59.89**  | 0.8     |
 | AWA2    | 54.1           | 51.66    | 0.6    | **60.51**  | 0.2     |
@@ -22,9 +22,9 @@ For testing, set mode to test and set alpha, gamma to best combination from tabl
 
 #### Generalized ZSL
 
-|Dataset |ZSLGBU Results       |||Respository Results     ||||||||
+|Dataset |ZSLGBU Results       |||Repository Results     ||||||||
 |--------|:-----:|:-----:|:-----:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|        |       |       |       | F->S (W) ||| Lambda | S->F (W^T) ||| Lambda  |
+|        |       |       |       | F->S (W) ||| Lambda | S->F (W.T) ||| Lambda  |
 |        | U     | S     | H     | U | S | H  |        | U | S | H    |         |
 | CUB    | 12.6 | **63.8** | 21.0 | **14.70** | 56.53 | **23.34** | 1 | **14.70** | 56.53 | **23.34** | 1 |
 

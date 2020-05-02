@@ -11,19 +11,19 @@ For testing, set mode to test and set alpha, gamma to best combination from tabl
 
 #### Classical ZSL
 
-| Dataset | ZSLGBU Results| Respository Results |Hyperparams from Val |
-|---------|:-------------:|:-------------------:|:-------------------:|
-| CUB     |     53.9      | 	     53.94 		|Alpha=3, Gamma=-1    |
-| AWA1    |   **58.2**    |        56.80        |Alpha=3, Gamma=0     |
-| AWA2    |   **58.6**    |        54.82        |Alpha=3, Gamma=0     |
-| aPY     |     38.3      |      **38.56**      |Alpha=3, Gamma=-1    |
-| SUN     |     54.5      |      **55.69**      |Alpha=3, Gamma=2     |
+| Dataset | ZSLGBU Results| Repository Results | Hyperparams from Val |
+|---------|:-------------:|:------------------:|:--------------------:|
+| CUB     |     53.9      | 	   53.94 	   |Alpha=3, Gamma=-1     |
+| AWA1    |   **58.2**    |        56.80       |Alpha=3, Gamma=0      |
+| AWA2    |   **58.6**    |        54.82       |Alpha=3, Gamma=0      |
+| aPY     |     38.3      |      **38.56**     |Alpha=3, Gamma=-1     |
+| SUN     |     54.5      |      **55.69**     |Alpha=3, Gamma=2      |
 
 #### Generalized ZSL
 
-|Dataset |ZSLGBU Results       |||Respository Results |||Hyperparams from Val |
-|--------|:-----:|:-----:|:-----:|:-----:|:----:|:-----:|:-------------------:|
-|        | U     | S     | H     | U     | S    | H     |            	      |
+|Dataset || ZSLGBU Results      ||| Repository Results || Hyperparams from Val |
+|--------|:-----:|:-----:|:-----:|:-----:|:----:|:-----:|:--------------------:|
+|        | U     | S     | H     | U     | S    | H     |            	       |
 | CUB    | 12.6 | **63.8** | 21.0 | **14.70** | 56.53 | **23.34** |Alpha=3, Gamma=0 |
 | AWA1   | **6.6** | 75.6 | **12.1** | 5.29 | **86.84** | 9.98 |Alpha=3, Gamma=0 |
 | AWA2   | **5.9** | 77.8 | **11.0** | 4.04 | **88.84** | 7.72 |Alpha=3, Gamma=0 |
