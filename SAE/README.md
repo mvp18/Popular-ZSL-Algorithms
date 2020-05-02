@@ -5,13 +5,13 @@
 ```
 python sae/sae_gzsl.py -data AWA2/AWA1/CUB/SUN/APY -mode train
 ```
-For testing, set mode to test and set alpha, gamma to best combination from tables below.
+For testing, set mode to test and set ld1 (F->S) and ld2 (S->F) to the best values from the tables below.
 
 ## Results
 
 #### Classical ZSL
 
-| Dataset | ZSLGBU Results ||| Repository Results                    ||
+| Dataset | ZSLGBU Results || Repository Results                    |||
 |---------|:--------------:|:--------:|:------:|:----------:|:-------:|
 |         |                | F->S (W) | Lambda | S->F (W.T) | Lambda  |
 | CUB     | 33.3           | 39.48    | 100    | **46.70**  | 0.2     |
@@ -22,11 +22,15 @@ For testing, set mode to test and set alpha, gamma to best combination from tabl
 
 #### Generalized ZSL
 
-|Dataset |ZSLGBU Results       |||Repository Results     ||||||||
+|Dataset ||ZSLGBU Results       |||||Repository Results      |||||
 |--------|:-----:|:-----:|:-----:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 |        |       |       |       | F->S (W) ||| Lambda | S->F (W.T) ||| Lambda  |
 |        | U     | S     | H     | U | S | H  |        | U | S | H    |         |
-| CUB    | 12.6 | **63.8** | 21.0 | **14.70** | 56.53 | **23.34** | 1 | **14.70** | 56.53 | **23.34** | 1 |
+| CUB    | 7.8 | 54.0 | 13.6 | 13.86 | 49.88 | 21.69 | 80 | **15.72** | **57.02** | **24.64** | 0.2 |
+| AWA1   | 1.8 | 77.1 | 3.5 | 5.29 | 80.52 | 9.92 | 3.2 | **14.72** | **82.93** | **25.0** | 0.8 |
+| AWA2   | 1.1 | 82.2 | 2.2 | 5.0 | 81.42 | 9.42 | 0.8 | **12.86** | **87.20** | **22.41** | 0.2 |
+| aPY    | 0.4 | **80.9** | 0.9 | 8.28 | 27.97 | 12.77 | 0.16 | **9.48** | 56.62 | **16.24** | 2.56 |
+| SUN    | 8.8 | 18.0 | 11.8 | 16.81 | 24.69 | 20.0 | 0.32 | **19.03** | **31.20** | **23.64** | 0.08 |
 
 ### References
 
