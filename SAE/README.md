@@ -24,7 +24,7 @@ For testing, set mode to test and set ld1 (F->S) and ld2 (S->F) to the best valu
 
 |Dataset ||ZSLGBU Results       |||||Repository Results      |||||
 |--------|:-----:|:-----:|:-----:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|        |       |       |       | F->S (W) ||| Lambda | S->F (W.T) ||| Lambda  |
+|        |       |       |       ||F->S (W)  || Lambda ||S->F (W.T)  || Lambda  |
 |        | U     | S     | H     | U | S | H  |        | U | S | H    |         |
 | CUB    | 7.8 | 54.0 | 13.6 | 13.86 | 49.88 | 21.69 | 80 | **15.72** | **57.02** | **24.64** | 0.2 |
 | AWA1   | 1.8 | 77.1 | 3.5 | 5.29 | 80.52 | 9.92 | 3.2 | **14.72** | **82.93** | **25.0** | 0.8 |
