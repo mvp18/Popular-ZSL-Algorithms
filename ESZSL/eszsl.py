@@ -29,7 +29,7 @@ class ESZSL():
 	
 	def __init__(self):
 
-		data_folder = '../datasets/'+args.dataset+'/'
+		data_folder = '../xlsa17/data/'+args.dataset+'/'
 		res101 = io.loadmat(data_folder+'res101.mat')
 		att_splits=io.loadmat(data_folder+'att_splits.mat')
 

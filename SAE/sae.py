@@ -14,6 +14,7 @@ parser.add_argument('-ld2', '--ld2', default=5, help='best value for S-->F durin
 
 Range of Lambda for Validation:
 
+AWA1 -> 2-8 for [F-->S] and 0.4-1.6 for [S-->F]
 AWA2 -> 0.1-1.6
 CUB  -> 50-5000 for [F-->S] and 0.05-5 for [S-->F]
 SUN  -> 0.005-5
@@ -21,6 +22,7 @@ APY  -> 0.5-50
 
 Best Value of Lambda found by validation & corr. test accuracies:
 		   				
+AWA1 -> 0.5134 @ 3.0  [F-->S] 0.5989 @ 0.8  [S-->F]
 AWA2 -> 0.5166 @ 0.6  [F-->S] 0.6051 @ 0.2  [S-->F]
 CUB  -> 0.3948 @ 100  [F-->S] 0.4670 @ 0.2  [S-->F]
 SUN  -> 0.5285 @ 0.32 [F-->S] 0.5986 @ 0.16 [S-->F]
@@ -33,7 +35,7 @@ class SAE():
 
 		self.args = args
 
-		data_folder = '../datasets/'+args.dataset+'/'
+		data_folder = '../xlsa17/data/'+args.dataset+'/'
 		res101 = io.loadmat(data_folder+'res101.mat')
 		att_splits=io.loadmat(data_folder+'att_splits.mat')
 
@@ -131,7 +133,11 @@ class SAE():
 				lambda_S2F = ld
 				best_W_S2F = np.copy(W)
 			
-			ld*=2
+			if ld==3.2:
+				ld+=1.8
+			else:
+				ld*=2
+			# ld+=0.5
 
 		print('\nBest Val Acc --> [F-->S]:{} @ lambda = {} [S-->F]:{} @ lambda = {}\n'.format(best_acc_F2S, lambda_F2S, best_acc_S2F, lambda_S2F))
 		

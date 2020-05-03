@@ -13,13 +13,15 @@ parser.add_argument('-ld2', '--ld2', default=5, help='best value for S-->F durin
 """
 Range of Lambda for Validation:
 
+AWA1 -> 0.05-5
 AWA2 -> 0.05-1.6
 CUB  -> 5-5000 for [F-->S] and 0.05-5 for [S-->F]
 SUN  -> 0.005-5
 APY  -> 0.05-5
 
 Best Value of Lambda found by validation & corr. test accuracies:
-		   				
+
+AWA1 -> Seen : 0.8052 Unseen : 0.0529 HM : 0.0992 @ 3.2 [F-->S] Seen : 0.8293 Unseen : 0.1472 HM : 0.2500 @ 0.8 [S-->F]		   				
 AWA2 -> Seen : 0.8142 Unseen : 0.05 HM : 0.0942 @ 0.8 [F-->S] Seen : 0.8720 Unseen : 0.1286 HM : 0.2241 @ 0.2 [S-->F]
 CUB  -> Seen : 0.4988 Unseen : 0.1386 HM : 0.2169 @ 80 [F-->S] Seen : 0.5702 Unseen : 0.1572 HM : 0.2464 @ 0.2 [S-->F]
 SUN  -> Seen : 0.2469 Unseen : 0.1681 HM : 0.2 @ 0.32 [F-->S] Seen : 0.3120 Unseen : 0.1903 HM : 0.2364 @ 0.08 [S-->F]
@@ -32,7 +34,7 @@ class SAE():
 
 		self.args = args
 
-		data_folder = '../datasets/'+args.dataset+'/'
+		data_folder = '../xlsa17/data/'+args.dataset+'/'
 		res101 = io.loadmat(data_folder+'res101.mat')
 		att_splits=io.loadmat(data_folder+'att_splits.mat')
 
@@ -162,7 +164,7 @@ class SAE():
 				best_acc_S2F = acc_S2F
 				lambda_S2F = ld
 			
-			ld*=2
+			ld+=0.2
 
 		print('\nBest Val Acc --> [F-->S]:{} @ lambda = {} [S-->F]:{} @ lambda = {}\n'.format(best_acc_F2S, lambda_F2S, best_acc_S2F, lambda_S2F))
 		

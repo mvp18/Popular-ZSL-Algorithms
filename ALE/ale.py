@@ -35,7 +35,7 @@ class ALE():
 		random.seed(42)
 		np.random.seed(42)
 
-		data_folder = '../datasets/'+args.dataset+'/'
+		data_folder = '../xlsa17/data/'+args.dataset+'/'
 		res101 = io.loadmat(data_folder+'res101.mat')
 		att_splits=io.loadmat(data_folder+'att_splits.mat')
 
@@ -109,7 +109,6 @@ class ALE():
 			X_n = self.X_train[:, j]
 			y_n = self.labels_train[j]
 			y_ = train_classes[train_classes!=y_n]
-			print(y_.shape)
 			XW = np.dot(X_n, W)
 			gt_class_score = np.dot(XW, self.train_sig[:, y_n])
 
