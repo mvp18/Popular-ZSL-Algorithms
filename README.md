@@ -32,8 +32,8 @@ NIPS, 2013.
 
 ## Data Splits
 
-|Dataset |Total|Attributes|Class Split (Tr+Val+Ts)| ZSL     ||||Generalized ZSL|||
-|--------|-----|----------|-----------------------||:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|Dataset |Total|Attributes|Class Split (Tr+Val+Ts)||ZSL      ||||Generalized ZSL|||
+|--------|-----|----------|-----------------------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 |        |     |          |                       |tr |val|ts |tr|val|tr+val|ts seen|ts unseen|
 | SUN    |14340|102       |580+65+72              |11600|1300|1440|9280|1040|10320|2580|1440|
 | CUB    |11788|312       |100+50+50              |5875|2946|2967|4702|2355|7057|1764|2967|
