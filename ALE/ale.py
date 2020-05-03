@@ -10,19 +10,20 @@ from sklearn.metrics import confusion_matrix
 parser = argparse.ArgumentParser(description="ALE")
 
 parser.add_argument('-data', '--dataset', help='choose between APY, AWA2, AWA1, CUB, SUN', default='AWA2', type=str)
-# parser.add_argument('-mode', '--mode', help='train/test, if test set alpha, gamma to best values below', default='train', type=str)
 parser.add_argument('-e', '--epochs', default=100, type=int)
 parser.add_argument('-es', '--early_stop', default=15, type=int)
-parser.add_argument('-norm', '--norm_type', help='standard, L2, None', default='standard', type=str)
+parser.add_argument('-norm', '--norm_type', help='std(standard), L2, None', default='std', type=str)
 parser.add_argument('-lr', '--lr', default=0.01, type=float)
 
 """
 
 Best Values of (norm, lr) found by validation & corr. test accuracies:
 
+SUN  -> (L2, 0.1)        -> Test Acc : 0.5910
+AWA1 -> (L2, 0.01)       -> Test Acc : 0.5458
 AWA2 -> (L2, 0.001)      -> Test Acc : 0.5331
 CUB  -> (None, 1.0)      -> Test Acc : 0.4443
-APY  -> (standard, 2e-3) -> Test Acc : 0.3321
+APY  -> (std, 2e-3) -> Test Acc : 0.3321
 
 """
 
@@ -48,6 +49,8 @@ class ALE():
 		self.X_train = feat[:, np.squeeze(att_splits[train_loc]-1)]
 		self.X_val = feat[:, np.squeeze(att_splits[val_loc]-1)]
 		self.X_test = feat[:, np.squeeze(att_splits[test_loc]-1)]
+
+		print('Tr:{}; Val:{}; Ts:{}\n'.format(self.X_train.shape[1], self.X_val.shape[1], self.X_test.shape[1]))
 
 		labels = res101['labels']
 		self.labels_train = np.squeeze(labels[np.squeeze(att_splits[train_loc]-1)])
@@ -79,7 +82,7 @@ class ALE():
 		self.val_sig = sig[:, val_labels_unseen-1]
 		self.test_sig = sig[:, test_labels_unseen-1]
 
-		if self.args.norm_type=='standard':
+		if self.args.norm_type=='std':
 			print('Standard Scaling\n')
 			scaler = preprocessing.StandardScaler()
 			scaler.fit(self.X_train.T)
@@ -102,7 +105,7 @@ class ALE():
 
 	    return feat
 
-	def train(self, W, idx, train_classes, beta):
+	def update_W(self, W, idx, train_classes, beta):
 		
 		for j in idx:
 			
@@ -149,7 +152,7 @@ class ALE():
 
 			shuffle(rand_idx)
 
-			W = self.train(W, rand_idx, train_classes, beta)
+			W = self.update_W(W, rand_idx, train_classes, beta)
 
 			tr_acc = self.zsl_acc(self.X_train, W, self.labels_train, self.train_sig)			
 			val_acc = self.zsl_acc(self.X_val, W, self.labels_val, self.val_sig)

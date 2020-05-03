@@ -44,6 +44,8 @@ class ESZSL():
 		self.X_trainval = np.concatenate((self.X_train, self.X_val), axis=1)
 		self.X_test = feat[:, np.squeeze(att_splits[test_loc]-1)]
 
+		print('Tr:{}; Val:{}; Ts:{}\n'.format(self.X_train.shape[1], self.X_val.shape[1], self.X_test.shape[1]))
+
 		labels = res101['labels']
 		labels_train = labels[np.squeeze(att_splits[train_loc]-1)]
 		self.labels_val = labels[np.squeeze(att_splits[val_loc]-1)]

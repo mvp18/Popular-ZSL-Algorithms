@@ -3,7 +3,7 @@
 #### Train
 
 ```
-python eszsl/eszsl_gzsl.py -data AWA2/AWA1/CUB/SUN/APY -mode train
+python eszsl/eszsl_gzsl.py -data AWA2/AWA1/CUB/SUN/APY -mode train -alpha [KERNEL SPACE REGULARIZER] -gamma [ATT SPACE REGULARIZER]
 ```
 For testing, set mode to test and set alpha, gamma to best combination from tables below.
 

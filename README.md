@@ -43,7 +43,7 @@ NIPS, 2013.
 
 ## Code
 
-Each folder above has its own README with running instructions, results and their comparisons with those reported in [**ZSLGBU**](https://arxiv.org/abs/1707.00600). I have also put existing code references wherever relevant.
+Each folder above has its own `README` with running instructions, results and their comparisons with those reported in [**ZSLGBU**](https://arxiv.org/abs/1707.00600). I have also put existing code references wherever relevant.
 
 ## Setup
 
