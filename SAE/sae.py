@@ -48,6 +48,8 @@ class SAE():
 		self.X_val = feat[:, np.squeeze(att_splits[val_loc]-1)]
 		self.X_test = feat[:, np.squeeze(att_splits[test_loc]-1)]
 
+		print('Tr:{}; Val:{}; Ts:{}\n'.format(self.X_train.shape[1], self.X_val.shape[1], self.X_test.shape[1]))
+
 		labels = res101['labels']
 		self.labels_train = labels[np.squeeze(att_splits[train_loc]-1)]
 		self.labels_val = labels[np.squeeze(att_splits[val_loc]-1)]
@@ -133,11 +135,7 @@ class SAE():
 				lambda_S2F = ld
 				best_W_S2F = np.copy(W)
 			
-			if ld==3.2:
-				ld+=1.8
-			else:
-				ld*=2
-			# ld+=0.5
+			ld*=2			
 
 		print('\nBest Val Acc --> [F-->S]:{} @ lambda = {} [S-->F]:{} @ lambda = {}\n'.format(best_acc_F2S, lambda_F2S, best_acc_S2F, lambda_S2F))
 		

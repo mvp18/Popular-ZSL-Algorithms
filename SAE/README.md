@@ -3,7 +3,7 @@
 #### Train
 
 ```
-python sae/sae_gzsl.py -data AWA2/AWA1/CUB/SUN/APY -mode train
+python sae/sae_gzsl.py -data AWA2/AWA1/CUB/SUN/APY -mode train -ld1 [LOWER BOUND OF VARIATION] -ld2 [UPPER BOUND OF VARIATION]
 ```
 For testing, set mode to test and set ld1 (F->S) and ld2 (S->F) to the best values from the tables below.
 

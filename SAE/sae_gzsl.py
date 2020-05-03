@@ -81,6 +81,10 @@ class SAE():
 		self.X_val_gzsl = self.X_trainval_gzsl[:, np.array(val_gzsl_indices)]
 		self.labels_val_gzsl = self.labels_trainval_gzsl[np.array(val_gzsl_indices)]
 
+		print('Tr:{}; Val:{}; Tr+Val:{}; Test Seen:{}; Test Unseen:{}\n'.format(self.X_train_gzsl.shape[1], self.X_val_gzsl.shape[1], 
+			                                                                    self.X_trainval_gzsl.shape[1], self.X_test_seen.shape[1], 
+			                                                                    self.X_test_unseen.shape[1]))
+
 		i=0
 		for labels in trainval_classes_seen:
 			self.labels_trainval_gzsl[self.labels_trainval_gzsl == labels] = i    
@@ -164,7 +168,7 @@ class SAE():
 				best_acc_S2F = acc_S2F
 				lambda_S2F = ld
 			
-			ld+=0.2
+			ld*=0.2
 
 		print('\nBest Val Acc --> [F-->S]:{} @ lambda = {} [S-->F]:{} @ lambda = {}\n'.format(best_acc_F2S, lambda_F2S, best_acc_S2F, lambda_S2F))
 		
