@@ -9,6 +9,8 @@ For testing, set mode to test and set ld1 (F->S) and ld2 (S->F) to the best valu
 
 ## Results
 
+The numbers below are **class-averaged top-1 accuracies** (see ZSLGBU paper for details).
+
 #### Classical ZSL
 
 | Dataset | ZSLGBU Results || Repository Results                    |||
@@ -31,6 +33,8 @@ For testing, set mode to test and set ld1 (F->S) and ld2 (S->F) to the best valu
 | AWA2   | 1.1 | 82.2 | 2.2 | 5.0 | 81.42 | 9.42 | 0.8 | **12.86** | **87.20** | **22.41** | 0.2 |
 | aPY    | 0.4 | **80.9** | 0.9 | 8.28 | 27.97 | 12.77 | 0.16 | **9.48** | 56.62 | **16.24** | 2.56 |
 | SUN    | 8.8 | 18.0 | 11.8 | 16.81 | 24.69 | 20.0 | 0.32 | **19.03** | **31.20** | **23.64** | 0.08 |
+
+U -> Unseen Classes; S -> Seen Classes; H-> Harmonic Mean of the 2.
 
 ### References
 

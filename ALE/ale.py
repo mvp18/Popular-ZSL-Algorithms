@@ -11,18 +11,19 @@ parser = argparse.ArgumentParser(description="ALE")
 
 parser.add_argument('-data', '--dataset', help='choose between APY, AWA2, AWA1, CUB, SUN', default='AWA2', type=str)
 parser.add_argument('-e', '--epochs', default=100, type=int)
-parser.add_argument('-es', '--early_stop', default=15, type=int)
+parser.add_argument('-es', '--early_stop', default=10, type=int)
 parser.add_argument('-norm', '--norm_type', help='std(standard), L2, None', default='std', type=str)
 parser.add_argument('-lr', '--lr', default=0.01, type=float)
+parser.add_argument('-seed', '--rand_seed', default=42, type=int)
 
 """
 
 Best Values of (norm, lr) found by validation & corr. test accuracies:
 
-SUN  -> (L2, 0.1)        -> Test Acc : 0.5910
-AWA1 -> (L2, 0.01)       -> Test Acc : 0.5458
-AWA2 -> (L2, 0.001)      -> Test Acc : 0.5331
-CUB  -> (None, 1.0)      -> Test Acc : 0.4443
+SUN  -> (L2, 0.1)   -> Test Acc : 0.5910
+AWA1 -> (L2, 0.01)  -> Test Acc : 0.5458
+AWA2 -> (L2, 0.001) -> Test Acc : 0.5331
+CUB  -> (None, 1.0) -> Test Acc : 0.4443
 APY  -> (std, 2e-3) -> Test Acc : 0.3321
 
 """
@@ -33,8 +34,8 @@ class ALE():
 
 		self.args = args
 
-		random.seed(42)
-		np.random.seed(42)
+		random.seed(self.args.rand_seed)
+		np.random.seed(self.args.rand_seed)
 
 		data_folder = '../xlsa17/data/'+args.dataset+'/'
 		res101 = io.loadmat(data_folder+'res101.mat')
@@ -116,7 +117,7 @@ class ALE():
 			gt_class_score = np.dot(XW, self.train_sig[:, y_n])
 
 			for i, label in enumerate(y_):
-				score = 1+np.dot(XW, self.train_sig[:, label])-gt_class_score
+				score = 1+np.dot(XW, self.train_sig[:, label])-gt_class_score # acc. to original paper, margin shd always be 1.
 				if score>0:
 					Y = np.expand_dims(self.train_sig[:, y_n]-self.train_sig[:, label], axis=0)
 					W += self.args.lr*beta[int(y_.shape[0]/(i+1))]*np.dot(np.expand_dims(X_n, axis=1), Y)

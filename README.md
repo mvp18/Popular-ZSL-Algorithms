@@ -55,6 +55,12 @@ bash setup.sh
 
 This downloads data (splits, Res101 features and class embeddings) corresponding to the `Proposed Split` for AWA1, AWA2, CUB, SUN and aPY. To know more about the individual files, refer to the `README.txt` file available inside `xlsa17` folder.
 
+## TODOs
+
+- [] GZSL expts for ALE
+- [] GZSL expts for DeViSE
+- [] GZSL expts for SJE
+
 ## Contributing
 
 If you find any errors, kindly raise an issue and I will get back to you ASAP.

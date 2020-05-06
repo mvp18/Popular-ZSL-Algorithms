@@ -7,7 +7,7 @@ import random
 from sklearn import preprocessing
 from sklearn.metrics import confusion_matrix
 
-parser = argparse.ArgumentParser(description="GZSL with ALE")
+parser = argparse.ArgumentParser(description="GZSL with DeViSE")
 
 parser.add_argument('-data', '--dataset', help='choose between APY, AWA2, AWA1, CUB, SUN', default='AWA2', type=str)
 parser.add_argument('-e', '--epochs', default=100, type=int)
@@ -17,7 +17,7 @@ parser.add_argument('-lr', '--lr', default=0.01, type=float)
 parser.add_argument('-mr', '--margin', default=1, type=float)
 parser.add_argument('-seed', '--rand_seed', default=42, type=int)
 
-class ALE():
+class DeViSE():
 	
 	def __init__(self, args):
 
@@ -127,7 +127,7 @@ class ALE():
 
 	    return feat
 
-	def update_W(self, X, labels, sig, W, idx, train_classes, beta):
+	def update_W(self, X, labels, sig, W, idx, train_classes):
 		
 		for j in idx:
 			
@@ -138,11 +138,11 @@ class ALE():
 			gt_class_score = np.dot(XW, sig[:, y_n])
 
 			for i, label in enumerate(y_):
-				score = 1+np.dot(XW, sig[:, label])-gt_class_score # acc. to original paper, margin shd always be 1.
+				score = self.args.margin+np.dot(XW, sig[:, label])-gt_class_score
 				if score>0:
 					Y = np.expand_dims(sig[:, y_n]-sig[:, label], axis=0)
-					W += self.args.lr*beta[int(y_.shape[0]/(i+1))]*np.dot(np.expand_dims(X_n, axis=1), Y)
-
+					W += self.args.lr*np.dot(np.expand_dims(X_n, axis=1), Y)
+					break # acc. to the authors, it was practical to stop after first margin violating term was found
 		return W
 
 	def fit_train(self):
@@ -174,7 +174,7 @@ class ALE():
 
 			shuffle(rand_idx)
 
-			W = self.update_W(self.X_train_gzsl, self.labels_train_gzsl, self.train_sig, W, rand_idx, train_classes, beta)
+			W = self.update_W(self.X_train_gzsl, self.labels_train_gzsl, self.train_sig, W, rand_idx, train_classes)
 			
 			val_acc = self.zsl_acc(self.X_val_gzsl, W, self.labels_val_gzsl, self.val_sig)
 			tr_acc = self.zsl_acc(self.X_train_gzsl, W, self.labels_train_gzsl, self.train_sig)
@@ -228,7 +228,7 @@ class ALE():
 
 			shuffle(rand_idx)
 
-			W = self.update_W(self.X_trainval_gzsl, self.labels_trainval_gzsl, self.trainval_sig, W, rand_idx, trainval_classes, beta)
+			W = self.update_W(self.X_trainval_gzsl, self.labels_trainval_gzsl, self.trainval_sig, W, rand_idx, trainval_classes)
 			
 			tr_acc = self.zsl_acc(self.X_trainval_gzsl, W, self.labels_trainval_gzsl, self.trainval_sig)
 
@@ -290,5 +290,5 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 	print('Dataset : {}\n'.format(args.dataset))
 	
-	clf = ALE(args)	
+	clf = DeViSE(args)	
 	clf.evaluate()

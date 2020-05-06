@@ -3,11 +3,13 @@
 #### Train
 
 ```
-python sje/sje_gzsl.py -data AWA2/AWA1/CUB/SUN/APY -e [EPOCHS] -es [EARLY STOP] -norm [NORMALIZATION TYPE] -lr [LEARNING RATE]
+python ale/ale_gzsl.py -data AWA2/AWA1/CUB/SUN/APY -e [EPOCHS] -es [EARLY STOP] -norm [NORMALIZATION TYPE] -lr [LEARNING RATE]
 ```
 For testing, set learning rate (lr) and normalization type (norm) to best combination from the tables below.
 
 ## Results
+
+The numbers below are **class-averaged top-1 accuracies** (see ZSLGBU paper for details).
 
 #### Classical ZSL
 

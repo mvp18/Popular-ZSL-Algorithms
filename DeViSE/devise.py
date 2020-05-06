@@ -7,7 +7,7 @@ import random
 from sklearn import preprocessing
 from sklearn.metrics import confusion_matrix
 
-parser = argparse.ArgumentParser(description="SJE")
+parser = argparse.ArgumentParser(description="DeViSE")
 
 parser.add_argument('-data', '--dataset', help='choose between APY, AWA2, AWA1, CUB, SUN', default='AWA2', type=str)
 parser.add_argument('-e', '--epochs', default=100, type=int)
@@ -19,17 +19,17 @@ parser.add_argument('-seed', '--rand_seed', default=42, type=int)
 
 """
 
-Best Values of (norm, lr, margin) found by validation & corr. test accuracies:
+Best Values of (norm, lr, mr) found by validation & corr. test accuracies:
 
-CUB  -> (std, 0.1, 4.0)  -> Test Acc : 0.4938
-AWA1 -> (L2, 1.0, 2.5)   -> Test Acc : 0.5890
-AWA2 -> (L2, 1.0, 2.5)   -> Test Acc : 0.5830
-SUN  -> (std, 1.0, 2.0)  -> Test Acc : 0.5347
-APY  -> (None, 0.01, 1.5)-> Test Acc : 0.3286
+SUN  -> (None, 0.01, 3.0)-> Test Acc : 0.5569
+CUB  -> (L2, 1.0, 1.0)   -> Test Acc : 0.4407
+APY  -> (L2, 1.0, 1.0)   -> Test Acc : 0.3333
+AWA1 -> (std, 0.01, 200) -> Test Acc : 0.5525
+AWA2 -> (std, 0.001, 150)-> Test Acc : 0.5768
 
 """
 
-class SJE():
+class DeViSE():
 	
 	def __init__(self, args):
 
@@ -85,6 +85,7 @@ class SJE():
 		self.test_sig = sig[:, test_labels_unseen-1]
 
 		if self.args.norm_type=='std':
+			print('Standard Scaling\n')
 			scaler = preprocessing.StandardScaler()
 			scaler.fit(self.X_train.T)
 
@@ -93,6 +94,7 @@ class SJE():
 			self.X_test = scaler.transform(self.X_test.T).T
 
 		if self.args.norm_type=='L2':
+			print('L2 norm Scaling\n')
 			self.X_train = self.normalizeFeature(self.X_train.T).T
 			# self.X_val = self.normalizeFeature(self.X_val.T).T
 			# self.X_test = self.normalizeFeature(self.X_test.T).T
@@ -105,32 +107,22 @@ class SJE():
 
 	    return feat
 
-	def find_compatible_y(self, X_n, W, y_n):
-
-		XW = np.dot(X_n, W)
-		# Scale the projected vector
-		XW = preprocessing.scale(XW)
-		scores = np.zeros(self.train_sig.shape[1])
-		scores[y_n] = 0.0
-		gt_class_score = np.dot(XW, self.train_sig[:, y_n])
-		
-		for i in range(self.train_sig.shape[1]):
-			if i!=y_n:
-				scores[i] = self.args.margin + np.dot(XW, self.train_sig[:, i]) - gt_class_score
-
-		return np.argmax(scores)
-
-	def update_W(self, W, idx):
+	def update_W(self, W, idx, train_classes):
 		
 		for j in idx:
+			
 			X_n = self.X_train[:, j]
 			y_n = self.labels_train[j]
-			y = self.find_compatible_y(X_n, W, y_n)
-			
-			if y!=y_n:
-				Y = np.expand_dims(self.train_sig[:, y_n]-self.train_sig[:, y], axis=0)
-				W += self.args.lr*np.dot(np.expand_dims(X_n, axis=1), Y)
-		
+			y_ = train_classes[train_classes!=y_n]
+			XW = np.dot(X_n, W)
+			gt_class_score = np.dot(XW, self.train_sig[:, y_n])
+
+			for i, label in enumerate(y_):
+				score = self.args.margin+np.dot(XW, self.train_sig[:, label])-gt_class_score
+				if score>0:
+					Y = np.expand_dims(self.train_sig[:, y_n]-self.train_sig[:, label], axis=0)
+					W += self.args.lr*np.dot(np.expand_dims(X_n, axis=1), Y)
+					break # acc. to the authors, it was practical to stop after first margin violating term was found
 		return W
 
 	def fit(self):
@@ -147,16 +139,18 @@ class SJE():
 		W = np.random.rand(self.X_train.shape[0], self.train_sig.shape[0])
 		W = self.normalizeFeature(W.T).T
 
+		train_classes = np.unique(self.labels_train)
+
 		for ep in range(self.args.epochs):
 
 			start = time.time()
 
 			shuffle(rand_idx)
 
-			W = self.update_W(W, rand_idx)
-			
+			W = self.update_W(W, rand_idx, train_classes)
+
+			tr_acc = self.zsl_acc(self.X_train, W, self.labels_train, self.train_sig)			
 			val_acc = self.zsl_acc(self.X_val, W, self.labels_val, self.val_sig)
-			tr_acc = self.zsl_acc(self.X_train, W, self.labels_train, self.train_sig)
 
 			end = time.time()
 			
@@ -207,5 +201,5 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 	print('Dataset : {}\n'.format(args.dataset))
 	
-	clf = SJE(args)	
+	clf = DeViSE(args)	
 	clf.evaluate()

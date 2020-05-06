@@ -81,6 +81,8 @@ class SAE():
 		self.X_val_gzsl = self.X_trainval_gzsl[:, np.array(val_gzsl_indices)]
 		self.labels_val_gzsl = self.labels_trainval_gzsl[np.array(val_gzsl_indices)]
 
+		# Train and Val are first separated to find the best hyperparamters on val and then to finally use them to train on trainval set.
+
 		print('Tr:{}; Val:{}; Tr+Val:{}; Test Seen:{}; Test Unseen:{}\n'.format(self.X_train_gzsl.shape[1], self.X_val_gzsl.shape[1], 
 			                                                                    self.X_trainval_gzsl.shape[1], self.X_test_seen.shape[1], 
 			                                                                    self.X_test_unseen.shape[1]))
@@ -105,8 +107,6 @@ class SAE():
 		self.trainval_sig = sig[:, trainval_classes_seen-1]
 		self.train_sig = sig[:, train_classes-1]
 		self.val_sig = sig[:, val_classes-1]
-		self.test_sig_seen = sig[:, self.test_classes_seen-1]
-		self.test_sig_unseen = sig[:, self.test_classes_unseen-1]
 		self.test_sig = sig[:, test_classes-1] # Entire Signature Matrix
 
 		self.train_att_gzsl = np.zeros((self.X_train_gzsl.shape[1], self.train_sig.shape[0]))

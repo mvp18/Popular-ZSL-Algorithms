@@ -9,6 +9,8 @@ For testing, set mode to test and set alpha, gamma to best combination from tabl
 
 ## Results
 
+The numbers below are **class-averaged top-1 accuracies** (see ZSLGBU paper for details).
+
 #### Classical ZSL
 
 | Dataset | ZSLGBU Results| Repository Results | Hyperparams from Val |
@@ -29,6 +31,8 @@ For testing, set mode to test and set alpha, gamma to best combination from tabl
 | AWA2   | **5.9** | 77.8 | **11.0** | 4.04 | **88.84** | 7.72 |Alpha=3, Gamma=0 |
 | aPY    | **2.4** | 70.1 | **4.6** | 2.25 | **81.07** | 4.39 |Alpha=2, Gamma=0 |
 | SUN    | 11.0 | 27.9 | 15.8 | **13.75** | **28.41** | **18.53** |Alpha=3, Gamma=2 |
+
+U -> Unseen Classes; S -> Seen Classes; H-> Harmonic Mean of the 2.
 
 ### References
 
