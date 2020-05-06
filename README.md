@@ -57,9 +57,9 @@ This downloads data (splits, Res101 features and class embeddings) corresponding
 
 ## TODOs
 
-- [] GZSL expts for ALE
-- [] GZSL expts for DeViSE
-- [] GZSL expts for SJE
+- [ ] GZSL expts for ALE
+- [ ] GZSL expts for DeViSE
+- [ ] GZSL expts for SJE
 
 ## Contributing
 
