@@ -1,10 +1,10 @@
 ## Introduction
 
-This repository contains implementations of 5 classical zero-shot algorithms (**SAE**, **ALE**, **SJE**, **ESZSL**, and **DeViSE**) in the usual as well as the Generalized zero-shot settings using the 
+This repository contains implementations of 5 classical zero-shot algorithms (**SAE**, **ALE**, **SJE**, **ESZSL**, and **DeViSE**) in the usual as well as the Generalized zero-shot learning (GZSL) settings using the 
 `Proposed Split` and evaluation protocols (eg. Class-Averaged Top-1 Accuracy) outlined in 
 [Zero-Shot Learning - A Comprehensive Evaluation of the Good, the Bad and the Ugly](https://arxiv.org/abs/1707.00600) (**ZSLGBU**) by Yongqin Xian, Christoph H. Lampert, Bernt Schiele, Zeynep Akata (TPAMI 2018).
 
-To the best of my knowledge, this is the **first public implementation** of `SAE`, `ALE`, `SJE` and `DeViSE` under the ZSLGBU protocol. An existing implementation of `ESZSL` can be found [here](https://github.com/sbharadwajj/embarrassingly-simple-zero-shot-learning) (thanks to @sbharadwajj). To this, I have also added the Generalized ZSL functionality.
+This is the **first public implementation** of `SAE`, `ALE`, `SJE` and `DeViSE` under the **ZSLGBU** protocol. An existing implementation of `ESZSL` can be found [here](https://github.com/sbharadwajj/embarrassingly-simple-zero-shot-learning) (thanks to [@sbharadwajj](https://github.com/sbharadwajj)). To this, I have added the GZSL functionality.
 
 ## Reference Papers
 
@@ -32,18 +32,18 @@ NIPS, 2013.
 
 ## Data Splits
 
-|Dataset |Total|Attributes|Class Split (Tr+Val+Ts)||ZSL      ||||Generalized ZSL|||
-|--------|-----|----------|-----------------------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|        |     |          |                       |tr |val|ts |tr|val|tr+val|ts seen|ts unseen|
-| SUN    |14340|102       |580+65+72              |11600|1300|1440|9280|1040|10320|2580|1440|
-| CUB    |11788|312       |100+50+50              |5875|2946|2967|4702|2355|7057|1764|2967|
-| AWA1   |30475|85        |27+13+10               |16864|7926|5685|13460|6372|19832|4958|5685|
-| AWA2   |37322|85        |27+13+10               |20218|9191|7913|16187|7340|23527|5882|7913|
-| aPY    |15339|64        |15+5+12                |6086|1329|7924|4906|1026|5932|1483|7924|
+|Dataset |Total Images|Attributes|Class Split (Tr+Val+Ts)||ZSL      ||||GZSL           |||
+|--------|------------|----------|-----------------------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|        |            |          |                       |tr |val|ts |tr|val|tr+val|ts seen|ts unseen|
+| SUN    |14340       |102       |580+65+72              |11600|1300|1440|9280|1040|10320|2580|1440|
+| CUB    |11788       |312       |100+50+50              |5875|2946|2967|4702|2355|7057|1764|2967|
+| AWA1   |30475       |85        |27+13+10               |16864|7926|5685|13460|6372|19832|4958|5685|
+| AWA2   |37322       |85        |27+13+10               |20218|9191|7913|16187|7340|23527|5882|7913|
+| aPY    |15339       |64        |15+5+12                |6086|1329|7924|4906|1026|5932|1483|7924|
 
 ## Code
 
-Each folder above has its own `README` with running instructions, results and their comparisons with those reported in [**ZSLGBU**](https://arxiv.org/abs/1707.00600). I have also put existing code references wherever relevant.
+Each folder above has its own `README` with running instructions, results and their comparisons with those reported in [ZSLGBU](https://arxiv.org/abs/1707.00600). I have also put existing code references wherever relevant.
 
 ## Setup
 
