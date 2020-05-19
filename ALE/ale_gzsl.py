@@ -137,11 +137,13 @@ class ALE():
 			XW = np.dot(X_n, W)
 			gt_class_score = np.dot(XW, sig[:, y_n])
 
-			for i, label in enumerate(y_):
+			for i in range(len(y_)):
+				label = random.choice(y_)
 				score = 1+np.dot(XW, sig[:, label])-gt_class_score # acc. to original paper, margin shd always be 1.
 				if score>0:
 					Y = np.expand_dims(sig[:, y_n]-sig[:, label], axis=0)
 					W += self.args.lr*beta[int(y_.shape[0]/(i+1))]*np.dot(np.expand_dims(X_n, axis=1), Y)
+					break
 
 		return W
 
